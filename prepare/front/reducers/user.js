@@ -11,9 +11,6 @@
     changeNicknameLoading : false,  // [닉네임] 시도중 ,얘네들이 true이면 로딩창을 띄우기 위함이다.
     changeNicknameDone : false,
     changeNicknameError : null,
-    isLoggingIn : false,  // [로그인]시도중 ,얘네들이 true이면 로딩창을 띄우기 위함이다.
-    isLoggedIn : false,
-    isLoggingOut : false, // [로그아웃]시도중 ,얘네들이 true이면 로딩창을 띄우기 위함이다.
     me : null,
     signUpData: {},
     loginData: {}
@@ -45,14 +42,17 @@ export const CHANGE_NICKNAME_REQUEST = 'CHANGE_NICKNAME_REQUEST'
 export const CHANGE_NICKNAME_SUCCESS = 'CHANGE_NICKNAME_SUCCESS'
 export const CHANGE_NICKNAME_FAILURE = 'CHANGE_NICKNAME_FAILURE'
 
+export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
+export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME'
+
 
 const dummyUser = (data) => ({
     ...data,
     nickname : '원희최',
     id : 1,
-    Posts : [] , // 내가 쓴 게시글들
-    Followings : [],
-    Followers: [],
+    Posts : [{id : 1}], // 내가 쓴 게시글들
+    Followings : [{nickname : "홍길동"}, {nickname: "스펀지밥"}, {nickname: "뚱이"}],
+    Followers: [{nickname : "징징이"}, {nickname: "코난"}, {nickname: "미란이"}],
     // *시퀄라이저에서 합쳐주기 때문에 앞자리가 "대문자"이다.
 });
 
@@ -195,6 +195,22 @@ const reducer = (state = initialState , action) => {
                 changeNicknameLoading : false,
                 changeNicknameError : action.error,
                 };
+        case ADD_POST_TO_ME : 
+            return{
+                ...state,
+                me : {
+                    ...state.me,
+                    Posts : [{id: action.data}, ...state.me.Posts],
+                },
+            };
+        case REMOVE_POST_OF_ME : //게시글 삭제 action
+            return{
+                ...state,
+                me : {
+                    ...state.me,
+                    Posts : state.me.Posts.filter((v) => v.id !== action.data),
+                },
+            };
         default : 
         return state;
     }

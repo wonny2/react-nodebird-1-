@@ -12,6 +12,7 @@ export const initialState = {
             nickname : '원희최'
         },
         content : "첫 번째 게시글 #해시태그 #익스프레스",
+        id: shortId.generate(),
         Images : [
             {src : "https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg",},
             {src : "http://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg",},
@@ -19,13 +20,17 @@ export const initialState = {
     ],
         Comments : [
         {
+            id: shortId.generate(),
             User : {
+                id: shortId.generate(),
                 nickname : 'nero'
             },
             content : "우와 개정판이 나왔군요!",
         },
         {
+            id: shortId.generate(),
             User : {
+                id: shortId.generate(),
                 nickname : 'hero'
         } , 
             content : "얼른 사고싶어요~"
@@ -35,6 +40,9 @@ export const initialState = {
     addPostLoading: false, //게시글 추가 완료여부
     addPostDone : false,
     addPostError : null,
+    removePostLoading: false, 
+    removePostDone : false,
+    removePostError : null,
     addCommentLoading: false, // 댓글 추가 완료여부
     addCommentDone : false,
     addCommentError : null,
@@ -45,6 +53,10 @@ export const initialState = {
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+
+export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
+export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
+export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 
 export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
@@ -68,8 +80,8 @@ export const addComment = (data) => ({
 
 // 게시글 쓰면 이 state가 나왔음
 const dummyPost = (data) => ({
-    id: shortId.generate(),
-    content : data,
+    id: data.id,
+    content : data.content,
     User : {
         id : 1,
         nickname : "제로초"
@@ -106,12 +118,32 @@ const reducer = (state = initialState , action) => {
                 addPostDone: true,
                 mainPosts : [dummyPost(action.data), ...state.mainPosts], // dummyPost를 앞에 추가해야 글이 아래로 안 내려가고 위에 나타남
             };
-
         case ADD_POST_FAILURE :
             return{
                 ...state,
                 addPostLoading : false,
                 addPostError: action.error,
+            };
+        // ============ //
+        case REMOVE_POST_REQUEST :
+            return{
+                ...state,
+                removePostLoading : true,
+                removePostDone : false,
+                removePostError : null,
+            };
+        case REMOVE_POST_SUCCESS :  
+            return{
+                ...state,
+                removePostLoading : false,
+                removePostDone: true,
+                mainPosts : state.mainPosts.filter((v) => v.id !== action.data)
+            };
+        case REMOVE_POST_FAILURE :
+            return{
+                ...state,
+                removePostLoading : false,
+                removePostError: action.error,
             };
         // ============ //
         case ADD_COMMENT_REQUEST :
