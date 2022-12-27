@@ -41,6 +41,7 @@ function* logIn(action) {
 
 function* logOut() {
     try{
+        console.log("logout saga")
         yield delay(1000)
         // const result = yield call(logOutAPI)		// logOutAPI 요청 결과 담기
             yield put({

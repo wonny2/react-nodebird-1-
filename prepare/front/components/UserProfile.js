@@ -7,6 +7,8 @@ import { LOG_OUT_REQUEST } from '../reducers/user';
 const UserProfile = () => {
     const dispatch = useDispatch();
     const {me, logOutLoading} = useSelector((state) => state.user);
+    
+    console.log(me.Posts)
 
     const onLogOut = useCallback(() => {
         dispatch({

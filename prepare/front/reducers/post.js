@@ -2,7 +2,7 @@
 // 앞에 대문자로 다른 정보들고 합쳐서 주기 때문이고, id,contents는 게시글 자체의 속성이기 때문이다.
 // 이 구조가 현업에서 더미데이터 구조와 거의 동일하다!!
 import shortId from 'shortid'
-
+import produce from 'immer'
 
 export const initialState = {
     mainPosts : [{
@@ -100,82 +100,82 @@ const dummyComments = (data) => ({
     },
 });
 
-
+// reducer는 이전상태를 action을 통해 다음 상태로 만들어 내는 함!수!
+// 단 불변성은 지키면서!!
 const reducer = (state = initialState , action) => {
-    switch(action.type) {
+    return produce(state,(draft) => {
+        switch(action.type) {
 
-        case ADD_POST_REQUEST :
-            return{
-                ...state,
-                addPostLoading : true,
-                addPostDone : false,
-                addPostError : null,
-            };
-        case ADD_POST_SUCCESS :  
-            return{
-                ...state,
-                addPostLoading : false,
-                addPostDone: true,
-                mainPosts : [dummyPost(action.data), ...state.mainPosts], // dummyPost를 앞에 추가해야 글이 아래로 안 내려가고 위에 나타남
-            };
-        case ADD_POST_FAILURE :
-            return{
-                ...state,
-                addPostLoading : false,
-                addPostError: action.error,
-            };
-        // ============ //
-        case REMOVE_POST_REQUEST :
-            return{
-                ...state,
-                removePostLoading : true,
-                removePostDone : false,
-                removePostError : null,
-            };
-        case REMOVE_POST_SUCCESS :  
-            return{
-                ...state,
-                removePostLoading : false,
-                removePostDone: true,
-                mainPosts : state.mainPosts.filter((v) => v.id !== action.data)
-            };
-        case REMOVE_POST_FAILURE :
-            return{
-                ...state,
-                removePostLoading : false,
-                removePostError: action.error,
-            };
-        // ============ //
-        case ADD_COMMENT_REQUEST :
-            return{
-                ...state,
-                addCommentLoading : true,
-                addCommentDone : false,
-                addCommentError : null,
-            };
-        case ADD_COMMENT_SUCCESS :  {
-            const postIndex = state.mainPosts.findIndex((v) => v.id === action.data.postId); // 숫자반환
-            const post = {...state.mainPosts[postIndex]};
-            post.Comments = [dummyComments(action.data.content), ...post.Comments];
-            const mainPosts = [...state.mainPosts];
-            mainPosts[postIndex] = post;
+            case ADD_POST_REQUEST :
+                // ...state, <- 이 state를 draft로 변경함!
+                draft.addPostLoading = true;
+                draft.addPostDone =  false;
+                draft.addPostError = null;
+                break;
+            case ADD_POST_SUCCESS :  
+                draft.addPostLoading = false;
+                draft.addPostDone  =true;
+                draft.mainPosts.unshift(dummyPost(action.data)); // dummyPost를 앞에 추가해야 글이 아래로 안 내려가고 위에 나타남
+                break;
+            case ADD_POST_FAILURE :
+                draft.addPostLoading = false;
+                draft.addPostError = action.Error;
+                break;
+            // ============ //
+            case REMOVE_POST_REQUEST :
+                draft.removePostLoading = true;
+                draft.removePostDone = false;
+                draft.removePostError = null;
+                break;
+            case REMOVE_POST_SUCCESS :
+                draft.removePostLoading = false;
+                draft.removePostDone = true;
+                draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data);
+                break;
+            case REMOVE_POST_FAILURE :
+                draft.removePostLoading  = false;
+                draft.removePostError = action.error;
+                break;
+                // 원래모습 return{
+                //     ...state,
+                //     removePostLoading : false,
+                //     removePostError: action.error,
+                // };
+            // ============ //
+            case ADD_COMMENT_REQUEST :
+                draft.addCommentLoading = true;
+                draft.addCommentDone = false;
+                draft.addCommentError = null;
+                break;
 
-            return{
-                ...state,
-                mainPosts,
-                addCommentLoading: false,
-                addCommentDone: true,
-            };
+            // 이 부분 때문에 immer를 사용한 거라고 해도 무방하다
+            case ADD_COMMENT_SUCCESS :  {
+                const post = draft.mainPosts.find((v) => v.id === action.data.postId)
+                post.Comments.unshift(dummyComments(action.data.content)) //  강의에서는 dummyComment (s가 없음)
+                draft.addCommentLoading = false;
+                draft.addCommentDone = true;
+                break;
+                // const postIndex = state.mainPosts.findIndex((v) => v.id === action.data.postId); // 숫자반환
+                // const post = {...state.mainPosts[postIndex]};
+                // post.Comments = [dummyComments(action.data.content), ...post.Comments];
+                // const mainPosts = [...state.mainPosts];
+                // mainPosts[postIndex] = post;
+    
+                // return{
+                //     ...state,
+                //     mainPosts,
+                //     addCommentLoading: false,
+                //     addCommentDone: true,
+                // };
+            }
+            case ADD_COMMENT_FAILURE :
+                draft.addCommentDone = false;
+                draft.addCommentError = action.error;
+                break;
+            default : 
+            break;
         }
-        case ADD_COMMENT_FAILURE :
-                return{
-                    ...state,
-                    addCommentDone: false,
-                    addCommentError: action.error,
-                };
-        default : 
-        return state;
-    }
+    });
 }
 
 export default reducer;
