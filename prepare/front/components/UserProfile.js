@@ -8,7 +8,7 @@ const UserProfile = () => {
     const dispatch = useDispatch();
     const {me, logOutLoading} = useSelector((state) => state.user);
     
-    console.log(me.Posts)
+    // console.log(me.Posts)
 
     const onLogOut = useCallback(() => {
         dispatch({

@@ -1,6 +1,6 @@
-import { HYDRATE } from "next-redux-wrapper"; // 리덕스 서버 사이드 랜더링을 하기 위한 것
-import user from './user' // user.js의 함수형 이름을 변경할 수 있다. reducer가 user로 이름 바꿔쓴 것!
-import post from './post'  // 마찬가지로 post의 reducer를 post로 이름을 바꾼 것!
+import { HYDRATE } from 'next-redux-wrapper'; // 리덕스 서버 사이드 랜더링을 하기 위한 것
+import user from './user'; // user.js의 함수형 이름을 변경할 수 있다. reducer가 user로 이름 바꿔쓴 것!
+import post from './post';  // 마찬가지로 post의 reducer를 post로 이름을 바꾼 것!
 import { combineReducers } from "redux";
 // combineReducers : reducer함수들을 합쳐주는 기능!!!
 // user랑 post를 합쳐주기 위함

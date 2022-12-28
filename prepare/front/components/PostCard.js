@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'
 import PostCardContent from './PostCardContent'
 import styled from 'styled-components'
 import { REMOVE_POST_REQUEST } from "../reducers/post";
+import FollowButton from "./FollowButton";
 
 
 
@@ -68,13 +69,14 @@ const PostCard = ({ post }) => {
                             </Button.Group>
                         )}>
                             <EllipsisOutlined />
-                        </Popover>
+                        </Popover>,
                 ]}
+                extra={id && <FollowButton post={post} />}
                 >
                 <Card.Meta
                     avatar={<Avatar>{post.User.nickname[0]}</Avatar>} 
                     title={post.User.nickname}
-                    description={<PostCardContent postData={post.content} /> }
+                    description={<PostCardContent postData={post.contents} /> }
                 />
 
             </Card>

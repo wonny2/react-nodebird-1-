@@ -1,6 +1,12 @@
 import produce from "immer"
 
  export const initialState = {
+    followoading : false,  // [팔로우] 시도중 ,얘네들이 true이면 로딩창을 띄우기 위함이다.
+    followDone : false,
+    followError : null, 
+    upfollowLoading : false,  // [언팔로우] 시도중 ,얘네들이 true이면 로딩창을 띄우기 위함이다.
+    upfollowDone : false,
+    upfollowError : null, 
     logInLoading : false,  // [로그인] 시도중 ,얘네들이 true이면 로딩창을 띄우기 위함이다.
     logInDone : false,
     logInError : null, 
@@ -74,6 +80,36 @@ export const loginRequestAction = (data) => ({
 const reducer = (state = initialState , action) => {
     return produce(state, (draft) => {
         switch(action.type) {
+            case FOLLOW_REQUEST :
+                draft.followLoading = true;
+                draft.followError = null;
+                draft.followDone = false;
+                break;
+            case FOLLOW_SUCCESS :
+                draft.followLoading = false;
+                draft.me = dummyUser(action.data)
+                draft.followDone = true;
+                break;
+            case FOLLOW_FAILURE :
+                draft.followLoading = false;
+                draft.followError = action.error;
+                break;
+            // ============ //
+            case UNFOLLOW_REQUEST :
+                draft.upfollowLoading = true;
+                draft.upfollowError = null;
+                draft.upfollowDone = false;
+                break;
+            case UNFOLLOW_SUCCESS :
+                draft.upfollowLoading = false;
+                draft.me = dummyUser(action.data)
+                draft.upfollowDone = true;
+                break;
+            case UNFOLLOW_FAILURE :
+                draft.upfollowLoading = false;
+                draft.upfollowError = action.error;
+                break;
+            // ============ //
             case LOG_IN_REQUEST :
                 draft.logInLoading = true;
                 draft.logInError = null;

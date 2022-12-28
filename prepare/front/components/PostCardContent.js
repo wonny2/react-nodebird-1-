@@ -7,20 +7,20 @@ import Link from 'next/link'
 // 하지만 어떤 게 해쉬태그인지 구별해줘야 한다.
 // [정규표현식]을 사용하여 만들기.
 
-const PostCardContent = ({ postData }) => { // 첫 번째 게시글 #해시테그 #익스프레스
-    return(
-
+const PostCardContent = ({ postData }) => ( // 첫 번째 게시글 #해시테그 #익스프레스
         <div>
-            {postData.split(/(#[^\s#]+)/g).map((v, index) => {
+            {postData?.split(/(#[^\s#]+)/g).map((v) => {
                 if(v.match(/(#[^\s#]+)/)) {
-                    return <Link href={`/hashtag/${v.slice(1)}`} key={index}><a>{v}</a></Link>
+                    return(
+                    <Link href={`/hashtag/${v.slice(1)}`} key={v}>
+                        <a>{v}</a>
+                    </Link>
+                    )
                 }
                 return v;
             })}
         </div>
-    )
-
-}
+)
 
 PostCardContent.propTypes = { postData : PropTypes.string.isRequired };
 
