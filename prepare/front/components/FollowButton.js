@@ -14,6 +14,8 @@ const FollowButton = ({post}) => {
     // 내가 지금 팔로잉 했는지 안 했는지 여부
     const isFollowing = me?.Followings.find((v) => v.id === post.User.id)
 
+    console.log(`${isFollowing} 여기올시다`)
+
     const onClickButton = useCallback(() => {
         // 팔로우 하고 있는 상태에서 다시 누르면 "언팔로우"니까, unfollow action 실행하는 것 
         if(isFollowing) {

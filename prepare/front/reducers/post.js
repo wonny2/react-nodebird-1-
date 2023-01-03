@@ -63,7 +63,7 @@ export const generateDummyPost = (number) => Array(20).fill().map(() => ({
     id: shortId.generate(),
         User : {
             id: shortId.generate(),
-            nickname: faker.name.findName(),
+            nickname: faker.name.fullName(),
         },
         contents: faker.lorem.paragraph(),
 
@@ -75,7 +75,7 @@ export const generateDummyPost = (number) => Array(20).fill().map(() => ({
         Comments:[{
             User : {
                 id: shortId.generate(), 
-                nickname: faker.name.findName()
+                nickname: faker.name.fullName()
             },
             content: faker.lorem.sentence(),
         }],

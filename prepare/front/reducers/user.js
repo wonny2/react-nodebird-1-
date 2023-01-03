@@ -87,7 +87,7 @@ const reducer = (state = initialState , action) => {
                 break;
             case FOLLOW_SUCCESS :
                 draft.followLoading = false;
-                draft.me = dummyUser(action.data)
+                draft.me.Followings.push({id: action.data})
                 draft.followDone = true;
                 break;
             case FOLLOW_FAILURE :
@@ -102,7 +102,7 @@ const reducer = (state = initialState , action) => {
                 break;
             case UNFOLLOW_SUCCESS :
                 draft.upfollowLoading = false;
-                draft.me = dummyUser(action.data)
+                draft.me.Followings = draft.me.Followings.filter((v) => v.id !== action.data) // 언팔로우한 사람 데이터가 빠지는 것!! (!==)로 했기 때문
                 draft.upfollowDone = true;
                 break;
             case UNFOLLOW_FAILURE :
