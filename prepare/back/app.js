@@ -1,5 +1,4 @@
 // node는 서버가 아니다!
-// 익스프레스로 라우팅하기
 
 // app.get: 가져오다 
 // app.post: 생성하다
@@ -30,7 +29,7 @@ app.get('/posts' , (req,res) => {
 });
 
 app.use('/post', postRouter);
-// post와 delete의 /post가 겹쳐서
+// post와 delete의 /post가 겹쳐서 
 // 라우터를 분리하여 '/post' 픽스해주고,
 // POST의 /post || DELETE의 /post로 바꾼 것이다!!
 
