@@ -5,10 +5,15 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.TEXT,
             allowNull: false, // 필수
         },
+        // UserId: 1, 1번 유저가,
+        // PostId: 3, 3번 게시글을 작성했다.
     }, {
         charset: 'uft8mb4',
         collate: 'utf8mb4_general_ci', // 위에 두줄이 한글이 저장되도록 만든다.
     });
-    User.associate = (db) => {};
+    Comment.associate = (db) => {
+        db.Comment.belongsTo(db.User);
+        db.Comment.belongsTo(db.Post); // 댓글 하나가 여러게 게시글에 달릴 수 있나..? NOPE! 댓글은 게시글에 속해져 있는 거임!
+    };
     return User;
 };

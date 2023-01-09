@@ -9,7 +9,9 @@ module.exports = (sequelize, DataTypes) => {
         charset: 'uft8',
         collate: 'utf8_general_ci', // 위에 두줄이 한글이 저장되도록 만든다.
     });
-    User.associate = (db) => {};
+    Image.associate = (db) => {
+        db.Image.belongsTo(db.Post);
+    };
     return User;
 };
  
